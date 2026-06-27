@@ -11,8 +11,9 @@ const provider: common.ConfigFileAuthenticationDetailsProvider = new common.Conf
     const oracleIp = process.argv[4];    
     const customerIp = process.argv[5];
 
-    if (!ipsecId || !tunnelId ||!oracleIp ||!customerIp) {
+    if (!ipsecId || !tunnelId || !oracleIp || !customerIp) {
       console.error("Usage: node script.js <IPSec_ID> <Tunnel_ID> <oracleIp> <customerIp>");
+      process.exitCode = 1;
       return;
     }
     const updateIPSecConnectionTunnelDetails = {
@@ -57,7 +58,13 @@ const provider: common.ConfigFileAuthenticationDetailsProvider = new common.Conf
       updateIPSecConnectionTunnelRequest
     );
 
+    console.log(
+      `updateIPSecConnectionTunnel succeeded for tunnel ${tunnelId} (opc-request-id: ${updateIPSecConnectionTunnelResponse.opcRequestId})`
+    );
   } catch (error) {
-    console.log("updateIPSecConnectionTunnel Failed with error  " + error);
+    // Surface the failure to the caller (Terraform null_resource) via a non-zero exit code
+    // so a failed tunnel update aborts the apply instead of silently succeeding.
+    console.error("updateIPSecConnectionTunnel failed with error: " + error);
+    process.exitCode = 1;
   }
 })();
