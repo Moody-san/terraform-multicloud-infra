@@ -5,6 +5,10 @@ resource "oci_core_vcn" "vcn" {
   cidr_block     = var.vcn.cidr
   display_name   = var.vcn.name
   dns_label      = var.vcn.name
+  freeform_tags = {
+    Project   = "terraform-multicloud-infra"
+    ManagedBy = "Terraform"
+  }
 }
 
 #public subnet

@@ -53,5 +53,10 @@ resource "oci_core_instance" "server" {
     user_data           = "${base64encode(data.template_file.cloud-config.rendered)}"
   }
 
+  freeform_tags = {
+    Project   = "terraform-multicloud-infra"
+    ManagedBy = "Terraform"
+  }
+
 }
 

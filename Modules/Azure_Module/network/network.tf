@@ -1,6 +1,10 @@
 resource "azurerm_resource_group" "azurerg" {
   name     = "rg"
   location = var.region
+  tags = {
+    Project   = "terraform-multicloud-infra"
+    ManagedBy = "Terraform"
+  }
 }
 
 # virtual network
@@ -9,6 +13,10 @@ resource "azurerm_virtual_network" "azurevcn" {
   address_space       = [var.cidr_ip_block]
   location            = azurerm_resource_group.azurerg.location
   resource_group_name = azurerm_resource_group.azurerg.name
+  tags = {
+    Project   = "terraform-multicloud-infra"
+    ManagedBy = "Terraform"
+  }
 }
 
 # private subnet
