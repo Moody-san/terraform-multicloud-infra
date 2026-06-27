@@ -3,7 +3,7 @@ resource "oci_load_balancer_load_balancer" "public_load_balancer" {
   compartment_id = var.compartment_ocid
   display_name   = "publicloadbalancer"
   shape          = "flexible"
-  subnet_ids     = [var.subnet_id,var.subnet2_id]
+  subnet_ids     = [var.subnet_id, var.subnet2_id]
   #Optional
   is_private = false
   shape_details {
@@ -19,7 +19,7 @@ resource "oci_load_balancer_backend_set" "public_backend_set" {
     #Required
     protocol = "HTTP"
     #Optional
-    port = 31736
+    port     = 31736
     url_path = "/"
   }
   load_balancer_id = oci_load_balancer_load_balancer.public_load_balancer.id
@@ -28,17 +28,17 @@ resource "oci_load_balancer_backend_set" "public_backend_set" {
 }
 
 resource "oci_load_balancer_certificate" "certificate" {
-	#Required
-	certificate_name = "sslcertificate"
-	load_balancer_id = oci_load_balancer_load_balancer.public_load_balancer.id
+  #Required
+  certificate_name = "sslcertificate"
+  load_balancer_id = oci_load_balancer_load_balancer.public_load_balancer.id
 
-	#Optional
-	private_key = file("~/ssl/private.txt")
-	public_certificate = file("~/ssl/certificate.txt")
+  #Optional
+  private_key        = file("~/ssl/private.txt")
+  public_certificate = file("~/ssl/certificate.txt")
 
-	lifecycle {
-	    create_before_destroy = true
-	}
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "oci_load_balancer_listener" "public_listener" {
@@ -49,7 +49,7 @@ resource "oci_load_balancer_listener" "public_listener" {
   port                     = 443
   protocol                 = "HTTP"
   ssl_configuration {
-		certificate_name = oci_load_balancer_certificate.certificate.certificate_name
+    certificate_name        = oci_load_balancer_certificate.certificate.certificate_name
     verify_peer_certificate = false
   }
 }

@@ -113,6 +113,15 @@ locals {
 
 
 variable "azureservers" {
+  description = "Declarative list of Azure VMs to provision (hostname drives the master/worker/db role and Ansible inventory grouping)."
+  type = list(object({
+    hostname  = string
+    diskgb    = number
+    disktype  = string
+    vm_size   = string
+    imagetype = string
+    imagename = string
+  }))
   default = [
     {
       hostname  = "azuremaster"

@@ -1,5 +1,5 @@
-data "template_file" "cloud-config" {
-  template = <<YAML
+locals {
+  cloud_config = <<YAML
 #cloud-config
 
 # Add a shell script file
@@ -50,7 +50,12 @@ resource "oci_core_instance" "server" {
 
   metadata = {
     ssh_authorized_keys = file(var.ssh_key)
-    user_data           = "${base64encode(data.template_file.cloud-config.rendered)}"
+    user_data           = base64encode(local.cloud_config)
+  }
+
+  freeform_tags = {
+    Project   = "terraform-multicloud-infra"
+    ManagedBy = "Terraform"
   }
 
 }

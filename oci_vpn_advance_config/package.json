@@ -1,9 +1,10 @@
 {
   "name": "oci_vpn_advance_config",
   "version": "1.0.0",
-  "description": "",
+  "description": "Applies advanced per-tunnel IPSec/BGP settings to an OCI VPN connection that the OCI Terraform provider does not expose. Invoked by the Vpn_Module via null_resource local-exec.",
   "main": "script.js",
   "scripts": {
+    "build": "tsc script.ts",
     "script": "node script.js"
   },
   "author": "",

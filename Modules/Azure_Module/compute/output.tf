@@ -1,4 +1,5 @@
 output "server_details" {
+  description = "Per-VM facts (name, role booleans and private IP) consumed by the inventory and load balancer modules."
   value = {
     name                 = join("", [azurerm_linux_virtual_machine.main.computer_name])
     all_details          = join("", [azurerm_linux_virtual_machine.main.computer_name, " ansible_host=", azurerm_linux_virtual_machine.main.private_ip_address, " ansible_user=ubuntu"])
@@ -11,6 +12,7 @@ output "server_details" {
 }
 
 output "backenddetails" {
+  description = "Minimal IP/name pair used to register the VM in the Azure load balancer backend pools."
   value = {
     ip_address  = azurerm_linux_virtual_machine.main.private_ip_address
     server_name = azurerm_linux_virtual_machine.main.computer_name
@@ -18,6 +20,7 @@ output "backenddetails" {
 }
 
 output "output_ips" {
+  description = "VM name and private IP surfaced at the root for quick reference."
   value = {
     server_ip   = azurerm_linux_virtual_machine.main.private_ip_address
     server_name = azurerm_linux_virtual_machine.main.computer_name

@@ -85,7 +85,7 @@ resource "aws_network_interface" "web-server-nic" {
 
 resource "aws_eip" "one" {
   instance                  = aws_instance.web-server-instance.id
-  vpc                       = true
+  domain                    = "vpc"
   network_interface         = aws_network_interface.web-server-nic.id
   associate_with_private_ip = var.server_private_ip
   depends_on                = [aws_internet_gateway.gw]

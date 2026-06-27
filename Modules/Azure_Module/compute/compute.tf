@@ -1,5 +1,5 @@
-data "template_file" "cloud-config" {
-  template = <<YAML
+locals {
+  cloud_config = <<YAML
 #cloud-config
 
 # Add a shell script file
@@ -31,10 +31,10 @@ resource "azurerm_linux_virtual_machine" "main" {
   resource_group_name   = var.rgname
   size                  = var.vm_size
   eviction_policy       = var.eviction_policy
-  priority              = var.priority   // comment this to provision regular VM
-  max_bid_price         = var.max_bid_price  // comment this to provision regular VM
+  priority              = var.priority      // comment this to provision regular VM
+  max_bid_price         = var.max_bid_price // comment this to provision regular VM
   network_interface_ids = [azurerm_network_interface.azurenic.id]
-  user_data             = base64encode(data.template_file.cloud-config.rendered)
+  user_data             = base64encode(local.cloud_config)
 
   source_image_reference {
     offer     = local.source_image_reference.offer
@@ -55,5 +55,11 @@ resource "azurerm_linux_virtual_machine" "main" {
   admin_ssh_key {
     username   = var.username
     public_key = file(var.ssh_key)
+  }
+
+  tags = {
+    Project   = "terraform-multicloud-infra"
+    ManagedBy = "Terraform"
+    Hostname  = var.hostname
   }
 }

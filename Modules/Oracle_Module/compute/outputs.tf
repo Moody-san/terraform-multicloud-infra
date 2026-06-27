@@ -1,4 +1,5 @@
 output "server_details" {
+  description = "Per-instance facts (name, role booleans, public/private IP) consumed by the inventory and load balancer modules."
   value = {
     name                  = join("", [oci_core_instance.server.display_name])
     all_details           = join("", [oci_core_instance.server.display_name, " ansible_host=", oci_core_instance.server.public_ip == "" ? oci_core_instance.server.private_ip : oci_core_instance.server.public_ip, " ansible_user=ubuntu"])
@@ -14,6 +15,7 @@ output "server_details" {
 
 
 output "backenddetails" {
+  description = "IP/ID/name tuple used to register the instance in the OCI load balancer backend sets."
   value = {
     server_ip   = oci_core_instance.server.private_ip
     server_id   = oci_core_instance.server.id
@@ -22,6 +24,7 @@ output "backenddetails" {
 }
 
 output "output_ips" {
+  description = "Instance name and its reachable (public if present, else private) IP surfaced at the root."
   value = {
     server_ip   = oci_core_instance.server.public_ip != "" ? oci_core_instance.server.public_ip : oci_core_instance.server.private_ip
     server_name = oci_core_instance.server.display_name

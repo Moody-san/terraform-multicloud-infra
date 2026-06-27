@@ -39,7 +39,8 @@ module "k8sazurelb" {
 }
 
 output "azure_k8slb_private_ip" {
-  value = module.k8sazurelb.private_ip
+  description = "Private IP of the internal Azure load balancer fronting the Kubernetes API (port 6443)."
+  value       = module.k8sazurelb.private_ip
 }
 
 module "azurepubliclb" {
@@ -49,17 +50,19 @@ module "azurepubliclb" {
   }
   location     = module.azurenetwork.location
   rgname       = module.azurenetwork.name
-  vcnname =  module.azurenetwork.vcnname
+  vcnname      = module.azurenetwork.vcnname
   ssl_password = var.ssl_password
   azureservers = module.azureservers
   depends_on   = [module.azureservers]
 }
 
 output "azurepubliclb_publicip" {
-  value = module.azurepubliclb.public_ip
+  description = "Public IP of the Azure Application Gateway fronting the worker NodePort."
+  value       = module.azurepubliclb.public_ip
 }
 
 output "azure_servers" {
-  value = [for server in module.azureservers : server.output_ips]
+  description = "Name and IP of every provisioned Azure VM."
+  value       = [for server in module.azureservers : server.output_ips]
 }
 
