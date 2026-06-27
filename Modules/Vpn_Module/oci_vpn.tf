@@ -56,5 +56,6 @@ resource "null_resource" "ip_sec_connection_tunnel2_configuration" {
 
 
 output "drgid" {
-  value = var.drgid
+  description = "OCID of the DRG the IPSec connection is attached to (echoed for convenience)."
+  value       = var.drgid
 }

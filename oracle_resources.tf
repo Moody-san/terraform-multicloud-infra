@@ -9,7 +9,7 @@ module "oraclenetwork" {
   source         = "./Modules/Oracle_Module/network"
   compartment_id = var.oci_compartment_id
   AD             = data.oci_identity_availability_domains.ads.availability_domains[2]["name"]
-  AD2             = data.oci_identity_availability_domains.ads.availability_domains[1]["name"]
+  AD2            = data.oci_identity_availability_domains.ads.availability_domains[1]["name"]
 }
 
 module "oracleservers" {
@@ -32,7 +32,8 @@ module "oracleservers" {
 }
 
 output "oracle_servers" {
-  value = [for server in module.oracleservers : server.output_ips]
+  description = "Name and reachable IP of every provisioned OCI instance."
+  value       = [for server in module.oracleservers : server.output_ips]
 }
 
 
@@ -53,16 +54,18 @@ module "publicoracleloadbalancer" {
   }
   source           = "./Modules/Oracle_Module/publicloadbalancer"
   subnet_id        = module.oraclenetwork.ocipublicsubnet_id
-  subnet2_id        = module.oraclenetwork.ocipublicsubnet2_id
+  subnet2_id       = module.oraclenetwork.ocipublicsubnet2_id
   compartment_ocid = var.oci_compartment_id
   depends_on       = [module.oracleservers]
   oracleservers    = module.oracleservers
 }
 
 output "oracle_k8sprivatelb_ip" {
-  value = module.k8soracleloadbalancer.private_ip
+  description = "Private IP of the OCI network load balancer fronting the Kubernetes API (port 6443)."
+  value       = module.k8soracleloadbalancer.private_ip
 }
 
 output "oracle_publiclb_ip" {
-  value = module.publicoracleloadbalancer.public_ip
+  description = "Public IP of the OCI load balancer fronting the worker NodePort."
+  value       = module.publicoracleloadbalancer.public_ip
 }
