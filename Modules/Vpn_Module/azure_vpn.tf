@@ -29,7 +29,7 @@ resource "azurerm_virtual_network_gateway" "azurevpn" {
   vpn_type = "RouteBased"
 
   active_active = false
-  enable_bgp    = true
+  bgp_enabled   = true
   sku           = "VpnGw1"
 
   ip_configuration {
@@ -55,7 +55,7 @@ resource "azurerm_virtual_network_gateway_connection" "tooracle" {
 
   type                           = "IPsec"
   connection_protocol            = "IKEv2"
-  enable_bgp                     = true
+  bgp_enabled                    = true
   local_azure_ip_address_enabled = false
   virtual_network_gateway_id     = azurerm_virtual_network_gateway.azurevpn.id
   local_network_gateway_id       = azurerm_local_network_gateway.oraclecloud[each.value.index].id
