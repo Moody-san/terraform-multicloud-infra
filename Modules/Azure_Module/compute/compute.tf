@@ -1,5 +1,5 @@
-data "template_file" "cloud-config" {
-  template = <<YAML
+locals {
+  cloud_config = <<YAML
 #cloud-config
 
 # Add a shell script file
@@ -34,7 +34,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   priority              = var.priority      // comment this to provision regular VM
   max_bid_price         = var.max_bid_price // comment this to provision regular VM
   network_interface_ids = [azurerm_network_interface.azurenic.id]
-  user_data             = base64encode(data.template_file.cloud-config.rendered)
+  user_data             = base64encode(local.cloud_config)
 
   source_image_reference {
     offer     = local.source_image_reference.offer
